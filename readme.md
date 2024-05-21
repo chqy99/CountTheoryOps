@@ -1,9 +1,13 @@
 # 简介
-目的：用于获取算子的理论计算量。
+目的：用于获取算子的理论计算量。</b>
 实现思路：
-（1）以编译器前端扫描的方式，识别各个语句的计算量。
-（2）通过 theory_ops_ 变量记录理论计算量，逐语句（或块）来更新 theory_ops_。
-（3）在运行时， theory_ops_ 会跟 cpuCompute 函数一起计算，theory_ops_ 的值作为参考的理论计算量。
+（1）以编译器前端扫描的方式，识别各个语句的计算量。</b>
+（2）通过 theory_ops_ 变量记录理论计算量，逐语句（或块）来更新 theory_ops_。</b>
+（3）在运行时， theory_ops_ 会跟 cpuCompute 函数一起计算，theory_ops_ 的值作为参考的理论计算量。</b>
+用法：
+（1）gtest 中 op.h 增加 theory_ops_ 变量，op.cpp 给需要统计计算量的函数（一般为 cpuCompute 和 调用的函数）头尾增加 // count_ops_begin, // count_ops_end。
+（2）在 main 文件中，输入 op.cpp 的路径，可以设置 show_theoryOps 的参数来输出结果。
+（3）cpuCompute 函数中有些寻址语句或冗余写法不需要统计计算量，可以将其先注释掉。
 
 # 依赖项
 yaml; ply (词法语法解析器); clang-format (格式对齐使用)
