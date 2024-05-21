@@ -1,0 +1,122 @@
+### 设置关键字，与标识符区别
+base_reserved:
+  'if': 'IF'
+  'else': 'ELSE'
+  'switch': 'SWITCH'
+  'case': 'CASE'
+  'default': 'DEFAULT'
+  'while': 'WHILE'
+  'do': 'DO'
+  'for': 'FOR'
+  'break': 'BREAK'
+  'continue': 'CONTINUE'
+  'return': 'RETURN'
+  # 特殊运算符，单独处理
+  'sizeof': 'SIZEOF'
+  'typeid': 'TYPEID'
+  'dynamic_cast': 'DYNAMICCAST'
+  'static_cast': 'STATICCAST'
+  'reinterpret_cast': 'REINTERPRETCAST'
+  'const_cast': 'CONSTCAST'
+
+# 类型，关键字的一种
+dtype:
+  'void': 'VOID'
+  'bool': 'BOOL'
+  'char': 'CHAR'
+  'short': 'SHORT'
+  'int': 'INT'
+  'int64_t': 'INT64_T'
+  'long': 'LONG'
+  'float': 'FLOAT'
+  'double': 'DOUBLE'
+  'auto': 'AUTO'
+
+### 无计算量的符号
+symbol:
+  '\{': 'LBRACE'
+  '\}': 'RBRACE'
+  '\(': 'LPAREN'
+  '\)': 'RPAREN'
+  ',': 'COMMA'
+  ';': 'SEMICOLON'
+  '\.': 'DOT'
+  '->': 'ARROW'
+  ':': 'COLON'
+  '::': 'DOUBLECOLON'
+  ## 以下有计算量，单独处理
+  '=': 'ASSIGN' # 计算量视为 1
+  '\+\+': 'INCREMENT' # 前置时计算量视为2，后置时计算量视为3
+  '!': 'NOT' # 计算量视为 1
+  '--': 'DECREMENT' # 前置时计算量视为2，后置时计算量视为3
+  '\?': 'QUESTION'
+
+# 计算量均为 1 的双元运算，
+binary_operator:
+  '\+': 'PLUS'
+  '-': 'MINUS' # 单元运算符时，单独处理
+  '\*': 'TIMES' # 单元运算符时，单独处理
+  '\/': 'DIVIDE'
+  '%': 'MOD'
+  '\&\&': 'AND'
+  '\|\|': 'OR'
+  '\&': 'BITAND' # 单元运算符时，单独处理
+  '\|': 'BITOR'
+  '\^': 'BITXOR'
+  '\~': 'BITNOT'
+  '<<': 'LEFTSHIFT'
+  '>>': 'RIGHTSHIFT'
+
+# 比较运算符，计算量视为 0
+comp_operator:
+  '==': 'EQ'
+  '!=': 'NE'
+  '>': 'GT'
+  '>=': 'GE'
+  '<': 'LT'
+  '<=': 'LE'
+
+# op赋值运算符，运算量均为 2
+opassign:
+  '\+=': 'ADDASSIGN'
+  '-=': 'SUBASSIGN'
+  '\*=': 'MULASSIGN'
+  '\/=': 'DIVASSIGN'
+  '%=': 'MODASSIGN'
+  '<<=': 'LEFTSHIFTASSIGN'
+  '>>=': 'RIGHTSHIFTASSIGN'
+  '\&=': 'BITANDASSIGN'
+  '\^=': 'BITXORASSIGN'
+  '\|=': 'BITORASSIGN'
+
+### 以下 TOKEN 忽略
+ignore_reserved:
+  'enum': 'ENUM'
+  'union': 'UNION'
+  'class': 'CLASS'
+  'struct': 'STRUCT'
+  'this': 'THIS'
+  'try': 'TRY'
+  'throw': 'THROW'
+  'catch': 'CATCH'
+  'virtual': 'VIRTUAL'
+  'inline': 'INLINE'
+  'goto': 'GOTO'
+  'operator': 'OPERATOR'
+  'typedef': 'TYPEDEF'
+  'private': 'PRIVATE'
+  'protected': 'PROTECTED'
+  'public': 'PUBLIC'
+  'friend': 'FRIEND'
+  'template': 'TEMPLATE'
+  'new': 'NEW'
+  'delete': 'DELETE'
+  'extern': 'EXTERN'
+  'asm': 'ASM'
+  ## 变量或类型修饰，暂时不处理
+  'register': 'REGISTER'
+  'volatile': 'VOLATILE'
+  'signed': 'SIGNED'
+  'unsigned': 'UNSIGNED'
+  'static': 'STATIC'
+  'const': 'CONST'
