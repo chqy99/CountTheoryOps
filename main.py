@@ -2,7 +2,7 @@ from lexer_rules import lexer
 from parser_rules import parser
 
 # 具体算子 cpuCompute 路径，只支持单文件检查，不能文件跳转
-count_file_path = '/home/cambricon/vscode/TestCode/code.c++'
+count_file_path = '/home/cambricon/vscode/TestCode/code1.c++'
 with open(count_file_path, 'r', encoding='utf-8') as file:
         all_lines = file.readlines()
 # 扫描 [// count_ops_begin, // count_ops_end] 之间的文件
@@ -28,7 +28,7 @@ for item in codeLines:
 parser.parse(code, lexer)
 
 # 显示状态，0 为不显示，1 为以注释显示，2 为以代码显示
-def theoryOps_store(stmt_show = 0, block_show = 2, control_show = 0):
+def show_theoryOps(stmt_show = 2, block_show = 0, control_show = 0):
     from parser_rules import stmt_theoryOps_store, \
                              block_theoryOps_store, \
                              control_theoryOps_store
@@ -52,26 +52,26 @@ def theoryOps_store(stmt_show = 0, block_show = 2, control_show = 0):
     show_ops_count = sorted(show_ops_count, key=lambda x: x[0], reverse=True)
     return show_ops_count
 
-for item in theoryOps_store():
+for item in show_theoryOps():
     if item[1] == 0:
         continue
     if item[2] == 1:
-        insert_str = "// stmt: theory_ops_ += " + str(item[1]) + ";\n"
+        insert_str = "// last stmt: theory_ops_ += " + str(item[1]) + ";\n"
         codeLines.insert(item[0], insert_str)
     elif item[2] == 2:
-        insert_str = "theory_ops_ += " + str(item[1]) + "; // stmt ops\n"
+        insert_str = "/* last stmt */ theory_ops_ += " + str(item[1]) + ";\n"
         codeLines.insert(item[0], insert_str)
     elif item[2] == 4:
-        insert_str = "// block: theory_ops_ += " + str(item[1]) + ";\n"
+        insert_str = "// cur block: theory_ops_ += " + str(item[1]) + ";\n"
         codeLines.insert(item[0], insert_str)
     elif item[2] == 5:
-        insert_str = "theory_ops_ += " + str(item[1]) + "; // block ops\n"
+        insert_str = "/* cur block */ theory_ops_ += " + str(item[1]) + ";\n"
         codeLines.insert(item[0], insert_str)
     elif item[2] == 7:
-        insert_str = "// control: theory_ops_ += " + str(item[1]) + ";\n"
+        insert_str = "// cur control: theory_ops_ += " + str(item[1]) + ";\n"
         codeLines.insert(item[0], insert_str)
     elif item[2] == 8:
-        insert_str = "theory_ops_ += " + str(item[1]) + "; // control ops\n"
+        insert_str = "/* cur control */ theory_ops_ += " + str(item[1]) + ";\n"
         codeLines.insert(item[0], insert_str)
 
 # 按当前时间输出文件

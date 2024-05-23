@@ -337,7 +337,7 @@ def p_postfix2(p):
                | postfix LPAREN expr RPAREN
                | postfix LPAREN exprs RPAREN'''
     if len(p) == 4:
-        p[0] = p[1] + 1
+        p[0] = (p[1][0] + 1, p[1][1])
     else:
         p[0] = (p[1][0] + p[3] + 1, p[1][1])
 
