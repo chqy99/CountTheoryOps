@@ -26,12 +26,23 @@ def docstring_appender(docstr):
 
 # 定义程序入口规则，第一个函数默认为入口规则
 def p_stmts(p):
-    '''stmts : stmt
-             | stmts stmt'''
+    '''stmts : stmt_link
+             | stmts stmt_link'''
     if len(p) == 2:
         p[0] = p[1]
     else:
-        p[0] = p[1] + p[2]
+        p[0] = (p[1][0] + p[2][0], p[2][1])
+
+def p_stmts1(p):
+    '''stmts : stmt_nolink
+             | stmts stmt_nolink'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        if p[1][0] != 0:
+            global block_theoryOps_store
+            dict_add_value(block_theoryOps_store, p[1][1], p[1][0])
+        p[0] = p[2]
 
 def p_domain_name(p):
     '''domain_name : Name DOUBLECOLON Name'''
@@ -57,33 +68,39 @@ def p_block(p):
     '''block : LBRACE stmts RBRACE
              | LBRACE RBRACE'''
     if len(p) == 4:
-        p[0] = p[2]
+        p[0] = p[2][0]
         global block_theoryOps_store
-        dict_add_value(block_theoryOps_store, p.slice[3].lineno - 1, p[2])
+        dict_add_value(block_theoryOps_store, p.slice[3].lineno - 1, p[0])
     else:
         p[0] = 0
 
-# 同一域计算量累计
+# 语句
 def p_stmt(p):
-    '''stmt : expr_stmt
-            | declare_stmt
-            | func_name'''
+    '''stmt : stmt_link
+            | stmt_nolink'''
     p[0] = p[1]
 
-# 不同域计算量重新计数
-def p_stmt1(p):
-    '''stmt : block
-            | if_stmt
-            | while_stmt
-            | dowhile_stmt
-            | for_stmt
-            | switch_stmt
-            | BREAK SEMICOLON
-            | CONTINUE SEMICOLON
-            | RETURN SEMICOLON
-            | RETURN expr SEMICOLON
-            | SEMICOLON'''
-    p[0] = 0
+# 计算量累计语句，返回计算量和行号
+def p_stmt_link(p):
+    '''stmt_link : expr_stmt
+                 | declare_stmt'''
+    p[0] = p[1]
+
+# 计算量隔断语句
+def p_stmt_nolink(p):
+    '''stmt_nolink : block
+                   | if_stmt
+                   | while_stmt
+                   | dowhile_stmt
+                   | for_stmt
+                   | switch_stmt
+                   | BREAK SEMICOLON
+                   | CONTINUE SEMICOLON
+                   | RETURN SEMICOLON
+                   | RETURN expr SEMICOLON
+                   | SEMICOLON
+                   | func_name'''
+    p[0] = (0, 0)
 
 def p_if_stmt(p):
     '''if_stmt : IF LPAREN expr RPAREN stmt
@@ -91,9 +108,9 @@ def p_if_stmt(p):
     global control_theoryOps_store
     if len(p) == 6:
         dict_add_value(control_theoryOps_store, p.slice[4].lineno, p[3])
-        p[0] = p[3] + p[5]
+        p[0] = p[3] + p[5][0]
     else:
-        p[0] = p[2]
+        p[0] = p[2][0]
 
 def p_switch_stmt(p):
     '''switch_stmt : SWITCH LPAREN expr RPAREN LBRACE switch_contents RBRACE'''
@@ -105,9 +122,9 @@ def p_switch_content(p):
     if len(p) == 5:
         global control_theoryOps_store
         dict_add_value(control_theoryOps_store, p.slice[3].lineno, p[2][0])
-        p[0] = p[2][0] + p[4]
+        p[0] = p[2][0] + p[4][0]
     else:
-        p[0] = p[3]
+        p[0] = p[3][0]
 
 def p_switch_contents(p):
     '''switch_contents : switch_content
@@ -153,9 +170,9 @@ def p_declare_stmt(p):
     '''declare_stmt : declare_name SEMICOLON
                     | declare_names SEMICOLON
                     | declares_name SEMICOLON'''
-    p[0] = p[1]
     global stmt_theoryOps_store
     dict_add_value(stmt_theoryOps_store, p.slice[2].lineno, p[1])
+    p[0] = (p[1], p.slice[2].lineno)
 
 # 类型相关
 dtype_docstring = "dtype : "
@@ -202,9 +219,9 @@ def p_declares_name(p):
 def p_expr_stmt(p):
     '''expr_stmt : expr SEMICOLON
                  | exprs SEMICOLON'''
-    p[0] = p[1]
     global stmt_theoryOps_store
     dict_add_value(stmt_theoryOps_store, p.slice[2].lineno, p[1])
+    p[0] = (p[1], p.slice[2].lineno)
 
 # 单个表达式
 def p_expr(p):

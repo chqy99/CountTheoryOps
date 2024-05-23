@@ -37,9 +37,6 @@ def show_theoryOps(stmt_show = 1, block_show = 2, control_show = 0):
     block_show += 3
     control_show += 6
     show_ops_count = []
-    if stmt_show > 0:
-        for key in stmt_theoryOps_store:
-            show_ops_count.append([key, stmt_theoryOps_store[key], stmt_show])
 
     if block_show % 3 > 0:
         for key in block_theoryOps_store:
@@ -48,6 +45,10 @@ def show_theoryOps(stmt_show = 1, block_show = 2, control_show = 0):
     if control_show % 3 > 0:
         for key in control_theoryOps_store:
             show_ops_count.append([key, control_theoryOps_store[key], control_show])
+
+    if stmt_show > 0:
+        for key in stmt_theoryOps_store:
+            show_ops_count.append([key, stmt_theoryOps_store[key], stmt_show])
 
     show_ops_count = sorted(show_ops_count, key=lambda x: x[0], reverse=True)
     return show_ops_count
