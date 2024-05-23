@@ -109,6 +109,7 @@ ignore_reserved:
   'public': 'PUBLIC'
   'friend': 'FRIEND'
   'template': 'TEMPLATE'
+  'typename': 'TYPENAME'
   'new': 'NEW'
   'delete': 'DELETE'
   'extern': 'EXTERN'
