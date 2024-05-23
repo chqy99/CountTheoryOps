@@ -2,7 +2,7 @@ from lexer_rules import lexer
 from parser_rules import parser
 
 # 具体算子 cpuCompute 路径，只支持单文件检查，不能文件跳转
-count_file_path = '/home/cambricon/vscode/TestCode/code.c++'
+count_file_path = '/home/cambricon/vscode/TestCode/code1.c++'
 with open(count_file_path, 'r', encoding='utf-8') as file:
         all_lines = file.readlines()
 # 扫描 [// count_ops_begin, // count_ops_end] 之间的文件
@@ -28,7 +28,7 @@ for item in codeLines:
 parser.parse(code, lexer)
 
 # 显示状态，0 为不显示，1 为以注释显示，2 为以代码显示
-def show_theoryOps(stmt_show = 1, block_show = 2, control_show = 0):
+def show_theoryOps(stmt_show = 0, block_show = 2, control_show = 0):
     from parser_rules import stmt_theoryOps_store, \
                              block_theoryOps_store, \
                              control_theoryOps_store
