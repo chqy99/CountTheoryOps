@@ -28,6 +28,9 @@ for item in codeLines:
 parser.parse(code, lexer)
 
 # 显示状态，0 为不显示，1 为以注释显示，2 为以代码显示
+# stmt_show 对应单语句的计算量
+# block_show 为语句作用域的计算量，但作用域发生变化时就统计累计计算量
+# control_show 是除顺序语句之外语句的计算量（if, for, while, switch 等）
 def show_theoryOps(stmt_show = 0, block_show = 2, control_show = 0):
     from parser_rules import stmt_theoryOps_store, \
                              block_theoryOps_store, \
